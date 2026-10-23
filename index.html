@@ -854,6 +854,23 @@
   #bg{display:none !important;}
   html,body{background-color:#f7f7f7 !important;background-image:radial-gradient(rgba(0,0,0,.09) 1px,transparent 1.4px) !important;background-size:26px 26px !important;}
   .scene::before,.scene::after{display:none !important;}
+  /* V10 : calmer, fewer decorative details */
+  .geo i:nth-child(1){background:#003cff;}.geo i:nth-child(2){background:#ff0099;}.geo i:nth-child(3){background:#000;}.geo i:nth-child(4){background:#8eff90;}.geo i:nth-child(5){background:#003cff;}.geo i:nth-child(6){background:#ff0099;}
+  .kicker::before{display:none !important;}
+  .scene.turning .kicker::before,.scene.pink .kicker::before{display:inline-block !important;}
+  details.fold{margin-top:22px;background:#fff;border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.05),0 8px 22px rgba(0,0,0,.05);}
+  details.fold>summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;border-radius:18px;}
+  details.fold>summary::-webkit-details-marker{display:none;}
+  details.fold>summary::after{content:"+";font-size:22px;font-weight:500;color:var(--electric-blue);}
+  details.fold[open]>summary::after{content:"\2212";}
+  details.fold>.profiles-block{padding:0 18px 18px;}
+  details.fold>.profiles-block:first-of-type{margin-top:0;}
+  details.fold[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0;}
+  details.fold .profiles-block{border-top:none;margin-top:0;padding:4px 22px 22px;}
+  details.fold .profiles-block h3{display:none;}
+  .mailnote{font-size:13px;color:var(--ink-soft);margin-top:10px;}
+  .linkbtn{background:none;border:none;padding:6px 0;margin-top:14px;font:inherit;font-size:14px;font-weight:600;color:var(--electric-blue);cursor:pointer;text-decoration:underline;text-underline-offset:4px;}
+  .linkbtn:hover{opacity:.75;}
 </style>
 </head>
 <body>
@@ -984,6 +1001,8 @@ Object.assign(I18N.fr.exact,{"Press and hold the image to save it to your photos
 Object.assign(I18N.fr.exact,{"Try again":"Réessayer"});
 Object.assign(I18N.fr.exact,{"Open the image":"Ouvrir l’image"});
 Object.assign(I18N.fr.exact,{"HÜS · CONTEMPORARY ART MUSEUM": "HÜS · MUSÉE D’ART CONTEMPORAIN", "ALSACE, FRANCE": "ALSACE, FRANCE", "An entire city": "Une ville entière", "inside the museum": "dans le musée", "A ONE-YEAR EXHIBITION": "UNE EXPOSITION D’UN AN", "FICTIONAL POSTER": "AFFICHE FICTIVE"});
+Object.assign(I18N.fr.exact,{"Cultural management is rarely about one right answer. It is about arbitrating between money, artistic freedom, rights, audiences and public trust.": "La gestion culturelle n’a que rarement une seule bonne réponse. Il s’agit d’arbitrer entre argent, liberté artistique, droits, publics et confiance du public.", "I built this short simulation to show how I think about cultural management. You direct a museum for one year, face nine decisions, and get a profile you can compare with my own choices.": "J’ai construit cette courte simulation pour montrer comment je pense la gestion culturelle. Vous dirigez un musée pendant un an, affrontez neuf décisions et obtenez un profil à comparer avec mes propres choix.", "HÜS is a fictional contemporary art museum in Alsace, France. This year it commits much of its resources to one exhibition: THE CITY.": "Le HÜS est un musée d’art contemporain fictif en Alsace. Cette année, il engage une grande part de ses ressources dans une seule exposition : THE CITY.", "You are about to direct HÜS for one year, while its largest exhibition turns a museum hall into a living city.": "Vous êtes sur le point de diriger le HÜS pendant un an, alors que sa plus grande exposition transforme une salle du musée en ville vivante.", "An entire city is rebuilt inside HÜS's largest exhibition hall. Performers inhabit it all year, blurring the line between artwork and everyday life.": "Une ville entière est reconstruite dans la plus grande salle d’exposition du HÜS. Des performeurs l’habitent toute l’année, brouillant la frontière entre œuvre et vie quotidienne.", "You are HÜS's new director. THE CITY is announced, the contracts are being prepared and the first decisions cannot wait. Over nine choices, you decide what the museum will protect, risk or compromise.": "Vous êtes le nouveau directeur du HÜS. THE CITY est annoncée, les contrats sont en préparation et les premières décisions ne peuvent pas attendre. En neuf choix, vous décidez ce que le musée protégera, risquera ou sacrifiera.", "See my inspirations": "Voir mes inspirations", "See the six management profiles": "Voir les six profils de gestion", "Email me": "M’écrire", "LinkedIn": "LinkedIn"});
+Object.assign(I18N.fr.exact,{"Download my profile card": "Télécharger ma carte profil"});
 function buildFr(d){
   if(d.built) return; d.built=true; const ex=d.exact;
   DECISIONS.forEach(x=>{ const f=d.DEC[x.id]; if(!f) return; ex[x.title]=f[0]; ex[x.context]=f[1];
@@ -1037,7 +1056,7 @@ function setLang(l){
   LANG = l;
   try{ localStorage.setItem("siho-lang", l); }catch(e){}
   applyLang();
-  if(document.getElementById("cardPreview")) setTimeout(()=>downloadCard(),50);
+  if(document.querySelector("#cardPreview img.cardprev")) setTimeout(()=>downloadCard(),50);
 }
 document.addEventListener("click", ()=>setTimeout(applyLang,0));
 
@@ -1068,7 +1087,7 @@ const EXHIBITION = {
   name:"THE CITY",
   subtitle:"Art, life and the right to inhabit",
   duration:"One year",
-  concept:"An entire city is reconstructed inside HÜS's largest exhibition hall. Streets, apartments, shops, public squares and everyday objects form a living set exploring different ways of imagining and inhabiting the city. Performers inhabit it throughout the year, blurring the line between artwork, architecture and everyday life.",
+  concept:"An entire city is rebuilt inside HÜS's largest exhibition hall. Performers inhabit it all year, blurring the line between artwork and everyday life.",
 };
 
 const DECISIONS = [
@@ -1430,11 +1449,11 @@ function screenHome(){
     <div class="kicker">PORTFOLIO · CULTURAL MANAGEMENT</div>
     <div class="geo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <h1 class="display">Maïa Guerri</h1>
-    <p class="lede" style="margin-top:28px;font-size:19px;">Cultural management is rarely about one right answer. It is about arbitrating between money, artistic freedom, rights, audiences and public trust, and living with the consequences.</p>
+    <p class="lede" style="margin-top:28px;font-size:19px;">Cultural management is rarely about one right answer. It is about arbitrating between money, artistic freedom, rights, audiences and public trust.</p>
 
     <div class="home-section">
       <div class="home-label">ABOUT THE PROJECT</div>
-      <p class="lede">This project is my way of showing how I think about that work. Instead of listing skills on a CV, I built a short simulation: you direct a contemporary art museum for one year and face nine decisions. At the end you get a management profile, and you can compare it with my own choices.</p>
+      <p class="lede">I built this short simulation to show how I think about cultural management. You direct a museum for one year, face nine decisions, and get a profile you can compare with my own choices.</p>
       <div class="skill-grid" style="margin-top:24px;">
         <div class="skill"><b>Arbitrate</b><span>Weigh budget, rights, audiences and artistic ambition against each other.</span></div>
         <div class="skill"><b>Decide</b><span>Nine realistic dilemmas, each with trade-offs and visible consequences.</span></div>
@@ -1444,7 +1463,7 @@ function screenHome(){
 
     <div class="home-section">
       <div class="home-label">THE MUSEUM</div>
-      <p class="lede">HÜS is a fictional contemporary art museum in ${INSTITUTION.city}, housed in a former 1970s civic hall. This year it commits a large share of its resources to one exhibition: THE CITY.</p>
+      <p class="lede">HÜS is a fictional contemporary art museum in Alsace, France. This year it commits much of its resources to one exhibition: THE CITY.</p>
       <div class="statgrid">
         <div class="stat"><div class="snum mono">${INSTITUTION.budget}</div><div class="slabel">Annual budget</div></div>
         <div class="stat"><div class="snum mono">${INSTITUTION.staff}</div><div class="slabel">Permanent staff</div></div>
@@ -1463,7 +1482,7 @@ function screenIntro(){
     <div class="kicker">A PORTFOLIO SIMULATION</div>
     <div class="geo" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <h1 class="display">One Year at HÜS</h1>
-    <p class="lede">You are about to direct HÜS for one year, while its largest exhibition turns an entire museum hall into a living city. Every decision forces you to balance artistic freedom, money, rights, audiences, innovation and public trust.</p>
+    <p class="lede">You are about to direct HÜS for one year, while its largest exhibition turns a museum hall into a living city.</p>
     <p class="lede">Nine decisions. Six values in tension. One temporary exhibition that will define the institution.</p>
     <span class="accent-note">THE CITY · ONE-YEAR EXHIBITION</span>
     <div class="btn-row">
@@ -1496,13 +1515,12 @@ function screenMission(){
     <p class="report-sub">${EXHIBITION.subtitle}</p>
     <p class="lede narrow">${EXHIBITION.concept}</p>
     <div class="poster-wrap">${cityPoster()}</div>
-    <p class="lede narrow">The artistic language explores the city as an organised, lived and contested space through architecture, human interaction and collective imagination.</p>
     <div class="home-section" style="margin-top:36px;">
       <div class="home-label">HÜS AT THE START</div>
       <p class="lede narrow" style="margin-top:0;">Here is where HÜS stands before your first decision.</p>
       ${stateCardsHtml(METRIC_START, "start")}
     </div>
-    <p class="lede narrow" style="margin-top:36px;"><strong>Your role:</strong> You are HÜS's new director. THE CITY has already been announced, the contracts are being prepared and the first decisions cannot wait. Over the next nine choices, you will decide what the museum is willing to protect, risk or compromise.</p>
+    <p class="lede narrow" style="margin-top:36px;"><strong>Your role:</strong> You are HÜS's new director. THE CITY is announced, the contracts are being prepared and the first decisions cannot wait. Over nine choices, you decide what the museum will protect, risk or compromise.</p>
     <div class="btn-row">
       <button class="btn primary" onclick="startDecisions()">Take the role</button>
     </div>
@@ -1741,7 +1759,6 @@ function goReport(){
     return `<div class="defmoment">
       <div class="dtitle">${cityIcon(m.id,34,true)}<span>${m.title}</span></div>
       <div class="dchoice">You chose: ${m.label}</div>
-      <div class="dwhy">This decision had one of the strongest effects on the values that shaped your profile, especially ${topLabel.toLowerCase()}.</div>
     </div>`;
   }).join("");
 
@@ -1756,7 +1773,7 @@ function goReport(){
     <div class="report-head">${profileIcon(profile.top,92,true)}<div><div class="report-title">${profile.title}</div>
     <div class="report-sub">${profile.sub || ''}</div></div></div>
     <p class="report-desc">${profile.desc}</p>
-    <div id="cardPreview"><p class="cardhint">Creating your card…</p></div>
+    <div id="cardPreview"><button class="linkbtn" onclick="downloadCard()">Download my profile card</button></div>
 
     <div class="radar-wrap">
       <div class="radar-box">${radarSVG()}</div>
@@ -1777,6 +1794,7 @@ function goReport(){
       <h3>The Three Decisions That Defined Your Management</h3>
       ${momentsHtml}
     </div>
+
 
     <div class="profiles-block">
       <h3>The Six Possible Management Profiles</h3>
@@ -1805,6 +1823,7 @@ function goReport(){
       </div>
     </div>
 
+    <details class="fold"><summary>See my inspirations</summary>
     <div class="profiles-block"><h3>My Inspirations</h3>
     <p class="lede" style="margin-top:0;margin-bottom:18px;">I keep the references that help me think, and I say where they fall short.</p>
     <div class="profiles-grid">
@@ -1812,6 +1831,9 @@ function goReport(){
       <div class="profile-card"><div class="pctitle">Tino Sehgal</div><div class="psub">Artist · b. 1976</div><div class="pdesc">His live works place human presence and interaction at the centre, often without lasting objects. This inspires the performers in THE CITY and the idea that a cultural experience can emerge between people.</div><div class="pcrit"><div class="pcrit-label">Critical note</div><p>His contracts set a minimum pay for performers, but we hear little about their working conditions or whether they are named. THE CITY asks the same question.</p></div></div>
       <div class="profile-card"><div class="pctitle">Lina Bo Bardi</div><div class="psub">Architect · 1914–1992</div><div class="pdesc">She turned a former factory into a leisure centre for working people (SESC Pompéia). Like HÜS, a former civic hall, it shows that a cultural place can belong to those who use it.</div><div class="pcrit"><div class="pcrit-label">Critical note</div><p>Her museum in São Paulo was born from a press magnate’s collection, even though she wanted it open to everyone. Who owns a “public” place? I ask the same about HÜS.</p></div></div>
     </div></div>
+    </details>
+
+
     <div class="contact-block">
       <div>
         <div class="contact-label">About this project</div>
@@ -1822,10 +1844,12 @@ function goReport(){
         <div class="contact-label">Thank you</div>
         <h3>Thank you for playing.</h3>
         <p>Thank you for taking the time to explore HÜS and to think through the choices behind THE CITY.</p>
-        <p style="margin-top:10px;">
-          <a class="plain" href="mailto:mguerri013@gmail.com">mguerri013@gmail.com</a>
-          · <a class="plain" href="https://www.linkedin.com/in/maïa-guerri" target="_blank" rel="noopener noreferrer">www.linkedin.com/in/maïa-guerri</a>
-        </p>
+        <div class="btn-row" style="margin-top:16px;">
+          <a class="btn primary" href="mailto:mguerri013@gmail.com">Email me</a>
+          <a class="btn" href="https://www.linkedin.com/in/ma%C3%AFa-guerri" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+        <p class="mailnote">mguerri013@gmail.com</p>
+
       </div>
     </div>
 
@@ -1835,7 +1859,6 @@ function goReport(){
     <p class="foot-note">Nine decisions. Six values in tension. No single correct answer.</p>
   `);
   animateMetrics(app);
-  setTimeout(()=>{ if(document.getElementById("cardPreview")) downloadCard(); }, 350);
 }
 
 
@@ -1955,12 +1978,7 @@ screenHome();
 
 <footer class="site-credit">
   <div class="credit-line">HÜS SIMULATION</div>
-  <div class="credit-author">by Maïa Guerri</div>
-  <div class="credit-contact">
-    <a href="mailto:mguerri013@gmail.com">mguerri013@gmail.com</a>
-    <span>·</span>
-    <a href="https://www.linkedin.com/in/maïa-guerri" target="_blank" rel="noopener noreferrer">www.linkedin.com/in/maïa-guerri</a>
-  </div>
+  <div class="credit-author"><a href="https://www.linkedin.com/in/ma%C3%AFa-guerri" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">by Maïa Guerri</a></div>
   <div class="credit-built">Coded with Visual Studio Code</div>
 </footer>
 
